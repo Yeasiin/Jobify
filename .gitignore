@@ -1,0 +1,3 @@
+.vscode
+_venv
+*.sqlite3
