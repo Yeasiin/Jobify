@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
-
+from dotenv import load_dotenv
+load_dotenv()
 from pathlib import Path
 from datetime import timedelta
+from os import environ as env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -158,11 +160,17 @@ AUTH_USER_MODEL = "accounts.User"
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # No username
 ACCOUNT_LOGIN_METHODS = {"email"}          # Only email login
-ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]  # Required fields
+ACCOUNT_SIGNUP_FIELDS = ["email*", "user_type*", "first_name*", "last_name*", "password1*", "password2*"]
 
-# ACCOUNT_CONFIRM_EMAIL_ON_GET=True
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = env.get('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.get('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 
 REST_FRAMEWORK = {
@@ -175,12 +183,15 @@ REST_FRAMEWORK = {
 }
 
 REST_AUTH = {
-    "REGISTER_SERIALIZER": "accounts.serializers.CustomRegisterSerializer",
     'USE_JWT': True,
     'JWT_AUTH_HTTPONLY': False,
     'JWT_AUTH_COOKIE':'core-app-auth',
     'JWT_AUTH_REFRESH_COOKIE':'core-refresh-token',
+      # Custom serializers
+    'USER_DETAILS_SERIALIZER': 'accounts.serializers.CustomUserDetailsSerializer',
+    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
 }
+
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME':timedelta(days=30),
