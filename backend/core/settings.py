@@ -21,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l=jcrb)9y)rgk^2@-jwkqck+zy=4^^i-xsn*#ohe2_!n^3t9+)'
+SECRET_KEY = 'django-insecure-$&4ly3=965haxt)&@-7vr0e@conkmpripm15s=50#r@y6%ba1a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -32,31 +32,30 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',    
-    'django.contrib.auth',    
+    'django.contrib.admin',
+    'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',    
+    'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.sites',
-
     # 'django.contrib.staticfiles',
-    "allauth",
-    "allauth.account",
-    "allauth.socialaccount",
+    'django.contrib.sites',
     
-    "dj_rest_auth",
-    "dj_rest_auth.registration",
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
     
-    "rest_framework",
-    "rest_framework.authtoken",
-    "rest_framework_simplejwt",
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
     
-    "drf_yasg",
-    # own app
-    "accounts"
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
+    
+    'drf_yasg',
+    # 
 ]
 
-SITE_ID = 1
+SITE_ID = 1 
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -67,8 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware'
-    
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -137,7 +135,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT= BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR /  'static'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
@@ -146,37 +144,36 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "accounts.CustomUser"
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None 
-ACCOUNT_LOGIN_METHODS= {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1', 'password2']
-ACCOUNT_UNIQUE_EMAIL = True
- 
-REST_AUTH_REGISTER_SERIALIZERS = {
-    'REGISTER_SERIALIZER': 'accounts.serializers.CustomRegisterSerializer',
-}
-
 AUTHENTICATION_BACKENDS = [
-    # needed to login by username in django admin, regardless of 'allauth'
-    'django.contrib.auth.backends.ModelBackend',
-    # 'authall' specific authentication method, such as login by email
-    'allauth.account.auth_backends.AuthenticationBackend'
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend"
 ]
+
+# ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['username','email*', 'password1', 'password2']
+
+ACCOUNT_UNIQUE_EMAIL = True 
+
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+
 REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES':['rest_framework.permissions.IsAuthenticated'],
+    'DEFAULT_PERMISSION_CLASSES':[
+        'rest_framework.permissions.IsAuthenticated'
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework_simplejwt.authentication.JWTAuthentication'
-    ]
+    ],
 }
- 
+
 REST_AUTH = {
-    'USE_JWT':True,
-    'JWT_AUTH_HTTPONLY':False,
+    'USE_JWT': True,
+    'JWT_AUTH_HTTPONLY': False,
     'JWT_AUTH_COOKIE':'core-app-auth',
-    'JWT_AUTH_REFRESH_COOKIE':'core-refresh-token'
+    'JWT_AUTH_REFRESH_COOKIE':'core-refresh-token',
 }
 
 SIMPLE_JWT = {
@@ -186,8 +183,12 @@ SIMPLE_JWT = {
 
 SWAGGER_SETTINGS = {
     "SECURITY_DEFINITIONS":{
-        "Bearer":{"type":"apiKey", "name":"Authorization","in":"header"}
+        "Bearer":{"type":"apiKey","name":"Authorization", "in":"header"}
     }
 }
+
+
+
+
 
 
