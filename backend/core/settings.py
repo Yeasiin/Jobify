@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     
     'drf_yasg',
     # 
+     "accounts"
 ]
 
 SITE_ID = 1 
@@ -150,12 +151,16 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 # ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-ACCOUNT_LOGIN_METHODS = {'email'}
-ACCOUNT_SIGNUP_FIELDS = ['username','email*', 'password1', 'password2']
+# ACCOUNT_LOGIN_METHODS = {'email'}
+# ACCOUNT_SIGNUP_FIELDS = ['username','email*', 'password1', 'password2']
 
-ACCOUNT_UNIQUE_EMAIL = True 
+AUTH_USER_MODEL = "accounts.User"
 
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None  # No username
+ACCOUNT_LOGIN_METHODS = {"email"}          # Only email login
+ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]  # Required fields
 
+# ACCOUNT_CONFIRM_EMAIL_ON_GET=True
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -170,6 +175,7 @@ REST_FRAMEWORK = {
 }
 
 REST_AUTH = {
+    "REGISTER_SERIALIZER": "accounts.serializers.CustomRegisterSerializer",
     'USE_JWT': True,
     'JWT_AUTH_HTTPONLY': False,
     'JWT_AUTH_COOKIE':'core-app-auth',
