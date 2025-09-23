@@ -1,4 +1,8 @@
 from django.db import models
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 # Create your models here.
 
@@ -15,8 +19,9 @@ class Job(models.Model):
     description = models.TextField()
     requirements =  models.TextField()
     location = models.CharField(max_length=100)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE,null=True, blank=True,related_name='jobs')
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL,null=True, blank=True,related_name='jobs')
     created_at = models.DateTimeField(auto_now_add=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL,  related_name='job_posts')
     
     def __str__(self):
         return f'{self.title} X {self.company_name}'

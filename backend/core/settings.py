@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     # 
      "accounts",
-     "jobs"
+     "jobs",
+     "applications"
 ]
 
 SITE_ID = 1 
