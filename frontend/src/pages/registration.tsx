@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Link } from "react-router";
 
 export default function Registration() {
@@ -21,9 +28,17 @@ export default function Registration() {
           <Label className="mb-2">Email</Label>
           <Input type="text" placeholder="Enter your email" />
         </div>
-        <div className="mb-4">
+        <div className="mb-4 w-full">
           <Label className="mb-2">Account Type</Label>
-          <Input type="text" placeholder="Enter your email" />
+          <Select>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select Account Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Employer">Employer</SelectItem>
+              <SelectItem value="Job Seeker">Job Seeker</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="mb-5">
@@ -34,7 +49,7 @@ export default function Registration() {
           <Label className="mb-2">Confirm Password</Label>
           <Input type="password" placeholder="Confirm password" />
         </div>
-        <Button className="w-full bg-[#2A9156] hover:bg-[#227747]" size={"sm"}>
+        <Button className="w-full" size={"sm"}>
           Login
         </Button>
         <p className="mt-3 text-sm">
