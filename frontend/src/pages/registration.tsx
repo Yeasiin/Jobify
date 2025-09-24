@@ -9,8 +9,24 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
 
 export default function Registration() {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      first_name: "",
+      last_name: "",
+      email: "",
+      user_type: "",
+      password: "",
+      password2: "",
+    },
+  });
+
   return (
     <div className="container max-w-sm mx-auto">
       <div className="mt-12 mb-12">

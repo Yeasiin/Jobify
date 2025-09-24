@@ -10,6 +10,12 @@ class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     serializer_class  = JobSerializer
     
+    # def get_queryset(self):
+    #     queryset= super().get_queryset()
+    #     category_id = self.request.query_params.get('category', None)
+        
+    
+    
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance_id = instance.id  # store id before deleting
