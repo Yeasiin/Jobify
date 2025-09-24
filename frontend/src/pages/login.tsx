@@ -20,7 +20,7 @@ export default function Login() {
             <Link to={"/forgot"}>Forgot Password?</Link>
           </p>
         </div>
-        <Button className="w-full bg-[#2A9156] hover:bg-[#227747]" size={"sm"}>
+        <Button className="w-full" size={"sm"}>
           Login
         </Button>
         <p className="mt-3 text-sm">
