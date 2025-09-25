@@ -20,18 +20,18 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
 class CustomRegisterSerializer(RegisterSerializer):
     username = None 
     USER_TYPE_CHOICES = [
-        ("employer", "Employer"),
-        ("jobseeker", "Job Seeker"),
+        ("Employer", "Employer"),
+        ("Job Seeker", "Job Seeker"),
     ]
     first_name = serializers.CharField(max_length=30, required=False)
     last_name = serializers.CharField(max_length=30, required=False)
-    user_type = serializers.ChoiceField(choices=USER_TYPE_CHOICES, default='jobseeker')
+    user_type = serializers.ChoiceField(choices=USER_TYPE_CHOICES, default='Job Seeker')
     
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
         data['first_name'] = self.validated_data.get('first_name', '')
         data['last_name'] = self.validated_data.get('last_name', '')
-        data['user_type'] = self.validated_data.get('user_type', 'jobseeker')
+        data['user_type'] = self.validated_data.get('user_type', 'Job Seeker')
         return data
 
     def save(self, request):
@@ -39,7 +39,7 @@ class CustomRegisterSerializer(RegisterSerializer):
         user = adapter.new_user(request)
         self.cleaned_data = self.get_cleaned_data()
         
-        user.user_type = self.cleaned_data.get('user_type', 'jobseeker')
+        user.user_type = self.cleaned_data.get('user_type', 'Job Seeker')
         user.email = self.cleaned_data.get('email')
         user.first_name = self.cleaned_data.get('first_name', '')
         user.last_name = self.cleaned_data.get('last_name', '')
