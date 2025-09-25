@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 
 export default function CTASection() {
   return (
-    <div className="py-12 bg-[#edf8ff]">
+    <div className="py-12 bg-[#e7f6ff]">
       <div className="container mx-auto">
         <div className="bg-white rounded-2xl px-5 py-8">
           <div className="flex justify-between items-center">

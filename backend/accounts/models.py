@@ -6,10 +6,10 @@ class User(AbstractUser):
     username = None  
     email = models.EmailField(unique=True)
     USER_TYPE_CHOICES = (
-        ("employer", "Employer"),
-        ("jobseeker", "Job Seeker"),
+        ("Employer", "Employer"),
+        ("Job Seeker", "Job Seeker"),
     )
-    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='jobseeker')
+    user_type = models.CharField(max_length=20, choices=USER_TYPE_CHOICES, default='Job Seeker')
     
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
