@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Link } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,6 +16,7 @@ import { useState } from "react";
 import { authApi } from "@/api/authApi";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useAuthStore } from "@/store/useAuthStore";
 
 const UserTypeEnum = z.enum(["Employer", "Job Seeker"]);
 
@@ -52,12 +53,18 @@ const registerSchema = z
 export type RegisterInput = z.infer<typeof registerSchema>;
 
 export default function Registration() {
-  const registration = useMutation({
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+  const navigate = useNavigate();
+  const { login } = useAuthStore();
+
+  const registrationMutation = useMutation({
     mutationFn: authApi.register,
     onMutate: () => toast.loading("Loading...", { id: "register" }),
     onSuccess: (data) => {
-      console.log(data, "----");
-      // router.push("/profile_management/my_profile");
+      // registration done now login from the returned data
+      login(data.data);
+      navigate(from, { replace: true });
       toast.success("Account created successfully. Redirecting...", {
         id: "register",
       });
@@ -90,10 +97,8 @@ export default function Registration() {
   });
 
   const onSubmit = (data: RegisterInput) => {
-    registration.mutate(data);
+    registrationMutation.mutate(data);
   };
-
-  console.log(registration.error, "--dd");
 
   return (
     <div className="container max-w-sm mx-auto">
@@ -107,7 +112,12 @@ export default function Registration() {
               type="text"
               placeholder="Enter first name"
             />
-            <p className="text-red-400 text-sm">{errors.first_name?.message}</p>
+            <p className="text-red-400 text-sm">
+              {errors.first_name?.message}
+              {registrationMutation.error?.response?.data?.data?.first_name?.join(
+                "\n"
+              )}
+            </p>
           </div>
           <div className="mb-4">
             <Label className="mb-2">Last Name</Label>
@@ -116,7 +126,12 @@ export default function Registration() {
               type="text"
               placeholder="Enter last name"
             />
-            <p className="text-red-400 text-sm">{errors.last_name?.message}</p>
+            <p className="text-red-400 text-sm">
+              {errors.last_name?.message}
+              {registrationMutation.error?.response?.data?.data?.last_name?.join(
+                "\n"
+              )}
+            </p>
           </div>
 
           <div className="mb-4">
@@ -126,7 +141,12 @@ export default function Registration() {
               type="text"
               placeholder="Enter your email"
             />
-            <p className="text-red-400 text-sm">{errors.email?.message}</p>
+            <p className="text-red-400 text-sm">
+              {errors.email?.message}
+              {registrationMutation.error?.response?.data?.data?.email?.join(
+                "\n"
+              )}
+            </p>
           </div>
           <div className="mb-4 w-full">
             <Label className="mb-2">Account Type</Label>
@@ -150,7 +170,12 @@ export default function Registration() {
                 </Select>
               )}
             />
-            <p className="text-red-400 text-sm">{errors.user_type?.message}</p>
+            <p className="text-red-400 text-sm">
+              {errors.user_type?.message}
+              {registrationMutation.error?.response?.data?.data?.user_type?.join(
+                "\n"
+              )}
+            </p>
           </div>
 
           <div className="mb-5">
@@ -205,7 +230,12 @@ export default function Registration() {
               </button>
             </div>
 
-            <p className="text-red-400 text-sm">{errors.password1?.message}</p>
+            <p className="text-red-400 text-sm">
+              {errors.password1?.message}
+              {registrationMutation.error?.response?.data?.data?.password1?.join(
+                "\n"
+              )}
+            </p>
           </div>
           <div className="mb-5">
             <Label className="mb-2">Confirm Password</Label>
@@ -258,16 +288,20 @@ export default function Registration() {
                 )}
               </button>
             </div>
-            <p className="text-red-400 text-sm">{errors.password2?.message}</p>
+            <p className="text-red-400 text-sm">
+              {errors.password2?.message}
+              {registrationMutation.error?.response?.data?.data?.password2?.join(
+                "\n"
+              )}
+            </p>
           </div>
           <Button
             type="submit"
-            onClick={handleSubmit(onSubmit)}
             className="w-full"
             size={"sm"}
-            disabled={registration.isPending}
+            disabled={registrationMutation.isPending}
           >
-            {registration.isPending ? "Logging..." : "Login"}
+            {registrationMutation.isPending ? "Registering..." : "Register"}
           </Button>
         </form>
         <p className="mt-3 text-sm">

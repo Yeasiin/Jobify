@@ -1,7 +1,10 @@
 import { Link } from "react-router";
 import { Button } from "./ui/button";
+import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Navbar() {
+  const { isAuthenticated, logout } = useAuthStore();
+
   return (
     <div className="border-b">
       <div className="container mx-auto py-3">
@@ -23,15 +26,21 @@ export default function Navbar() {
             </svg>
             <span className="font-bold text-xl">CareersHub</span>
           </div>
-          <div className="flex gap-2">
-            <Button asChild variant={"outline"}>
-              <Link to={"/login"}>Login</Link>
+          {isAuthenticated ? (
+            <Button onClick={logout} className="uppercase" variant={"outline"}>
+              Log out
             </Button>
+          ) : (
+            <div className="flex gap-2">
+              <Button asChild variant={"outline"}>
+                <Link to={"/login"}>Login</Link>
+              </Button>
 
-            <Button>
-              <Link to={"/registration"}>Register</Link>
-            </Button>
-          </div>
+              <Button>
+                <Link to={"/registration"}>Register</Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </div>
