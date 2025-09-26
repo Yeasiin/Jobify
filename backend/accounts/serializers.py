@@ -27,6 +27,13 @@ class CustomRegisterSerializer(RegisterSerializer):
     last_name = serializers.CharField(max_length=30, required=False)
     user_type = serializers.ChoiceField(choices=USER_TYPE_CHOICES, default='Job Seeker')
     
+    def validate_email(self, value):
+        value = value.lower()
+        if User.objects.filter(email__iexact=value).exists():
+            raise serializers.ValidationError('This email is already registered.')
+        return value
+    
+    
     def get_cleaned_data(self):
         data = super().get_cleaned_data()
         data['first_name'] = self.validated_data.get('first_name', '')
