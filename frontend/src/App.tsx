@@ -7,6 +7,7 @@ import NotFound404 from "./pages/404";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AnonymousRoute from "./components/AnonymousRoute";
 import CreateJob from "./pages/CreateJob";
+import PostedJobs from "./pages/PostedJobs";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
       </Route>
       <Route element={<ProtectedRoute />}>
         <Route path="/createJob" element={<CreateJob />} />
+        <Route path="/postedJobs" element={<PostedJobs />} />
       </Route>
 
       <Route path="*" element={<NotFound404 />} />

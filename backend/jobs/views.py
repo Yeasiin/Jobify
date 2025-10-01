@@ -3,16 +3,14 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Job, Category
 from .serializers import JobSerializer, CategorySerializer
+from .permissions import IsEmployeeOrReadOnly
 
 
 # Create your views here.
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     serializer_class  = JobSerializer
-    
-    # def get_queryset(self):
-    #     queryset= super().get_queryset()
-    #     category_id = self.request.query_params.get('category', None)
+    permission_classes = [IsEmployeeOrReadOnly]
         
     
     def destroy(self, request, *args, **kwargs):
@@ -24,13 +22,13 @@ class JobViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
         
-    def get_permissions(self):
-        if self.action in ['list','retrieve']:
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAuthenticated]
+    # def get_permissions(self):
+    #     if self.action in ['list','retrieve']:
+    #         permission_classes = [AllowAny]
+    #     else:
+    #         permission_classes = [IsAuthenticated]
         
-        return [permission() for permission in permission_classes]
+    #     return [permission() for permission in permission_classes]
     
     
 class CategoryListAPIView(generics.ListAPIView):
