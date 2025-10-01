@@ -7,6 +7,28 @@ type DecodedToken = {
     [key: string]: any
 }
 
+type UserType = {
+    pk: number;
+    email: string;
+    first_name: string;
+    last_name: string;
+    user_type: string;
+}
+
+type AuthStoreState = {
+    isAuthenticated: boolean;
+    token: undefined | string;
+    user: undefined | UserType
+}
+type LoginArg = { access: string; refresh: string; user: UserType }
+
+
+type AuthStoreActions = {
+    login: (data: LoginArg) => void
+    logout: () => void
+}
+
+type AuthStore = AuthStoreState & AuthStoreActions
 
 export function fetchInfo(): {
     isAuthenticated: boolean;
@@ -32,37 +54,17 @@ export function fetchInfo(): {
         return { isAuthenticated: false, token: undefined, user: undefined }
     }
 }
-type UserType = {
-    pk: number;
-    email: string;
-    first_name: string;
-    last_name: string;
-    user_type: string;
-}
-
-type AuthStoreState = {
-    isAuthenticated: boolean;
-    token: undefined | string;
-    user: undefined | UserType
-}
-type LoginArg = { access: string; refresh: string; user: UserType }
-
-type AuthStoreActions = {
-    login: (data: LoginArg) => void
-    logout: () => void
-}
-
-type AuthStore = AuthStoreState & AuthStoreActions
 
 export const useAuthStore = create<AuthStore>()((set) => {
     const initial = fetchInfo()
-
+    console.log(initial, "---")
     return {
         token: initial.token,
         user: initial.user,
         isAuthenticated: initial.isAuthenticated,
         login: (data: LoginArg) => {
             localStorage.setItem("auth-token", data.access)
+            localStorage.setItem("user-info", JSON.stringify(data.user))
             set({
                 token: data.access,
                 isAuthenticated: true,

@@ -2,7 +2,7 @@ from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Job, Category
-from .serializers import JobSerializer
+from .serializers import JobSerializer, CategorySerializer
 
 
 # Create your views here.
@@ -14,7 +14,6 @@ class JobViewSet(viewsets.ModelViewSet):
     #     queryset= super().get_queryset()
     #     category_id = self.request.query_params.get('category', None)
         
-    
     
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -36,12 +35,6 @@ class JobViewSet(viewsets.ModelViewSet):
     
 class CategoryListAPIView(generics.ListAPIView):
     queryset = Category.objects.all()
-    serializer_class = Category
-    
-    def get_permissions(self):
-        if self.action in ['list','retrieve']:
-            permission_classes = [AllowAny]
-        else:
-            permission_classes = [IsAuthenticated]
-        
-        return [permission() for permission in permission_classes]
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny] 
+    pagination_class= None
