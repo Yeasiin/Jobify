@@ -1,11 +1,9 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
-
 User = get_user_model()
 
 # Create your models here.
-
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
@@ -25,5 +23,3 @@ class Job(models.Model):
     
     def __str__(self):
         return f'{self.title} X {self.company_name}'
-    
-    

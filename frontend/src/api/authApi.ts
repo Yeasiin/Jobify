@@ -1,6 +1,6 @@
-import type { RegisterInput } from "@/pages/registration";
+import type { RegisterInput } from "@/pages/Registration";
 import { publicApi } from "./axios";
-import type { LoginInput } from "@/pages/login";
+import type { LoginInput } from "@/pages/Login";
 
 export const authApi = {
     register: (data: RegisterInput) => publicApi.post('/auth/registration', data),
