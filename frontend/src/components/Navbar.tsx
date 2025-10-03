@@ -41,9 +41,9 @@ export default function Navbar() {
                   </NavLink>
                   <NavLink
                     className={({ isActive }) => (isActive ? "underline" : "")}
-                    to="/postedJobs"
+                    to="/dashboard/employer"
                   >
-                    <span className="">Jobs</span>
+                    <span className="">Dashboard</span>
                   </NavLink>
                 </div>
                 <Button

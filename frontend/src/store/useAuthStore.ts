@@ -57,7 +57,6 @@ export function fetchInfo(): {
 
 export const useAuthStore = create<AuthStore>()((set) => {
     const initial = fetchInfo()
-    console.log(initial, "---")
     return {
         token: initial.token,
         user: initial.user,
