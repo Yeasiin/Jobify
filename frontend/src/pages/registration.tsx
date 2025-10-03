@@ -54,7 +54,7 @@ export type RegisterInput = z.infer<typeof registerSchema>;
 
 export default function Registration() {
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname;
   const navigate = useNavigate();
   const { login } = useAuthStore();
 
@@ -64,7 +64,19 @@ export default function Registration() {
     onSuccess: (data) => {
       // registration done now login from the returned data
       login(data.data);
-      navigate(from, { replace: true });
+
+      if (from && from !== "/login" && from !== "/registration") {
+        navigate(from, { replace: true });
+      } else {
+        setTimeout(() => {
+          if (data.data.user_type === "Job Seeker") {
+            navigate("/dashboard/jobseeker", { replace: true });
+          } else {
+            navigate("/dashboard/employer", { replace: true });
+          }
+        }, 0);
+      }
+
       toast.success("Account created successfully. Redirecting...", {
         id: "register",
       });

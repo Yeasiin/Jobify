@@ -7,13 +7,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate, redirect } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
 const loginSchema = z.object({
   email: z
-    .string()
     .email("Please enter a valid email")
     .transform((s) => s.toLowerCase().trim()),
   password: z.string(),
@@ -25,21 +24,39 @@ export default function Login() {
   const { login } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
-  const from = location.state?.from?.pathname || "/";
+  const from = location.state?.from?.pathname;
 
   const loginMutation = useMutation({
     mutationFn: authApi.login,
     onMutate: () => toast.loading("Loading...", { id: "login" }),
     onSuccess: (data) => {
       login(data.data);
-      navigate(from, { replace: true });
+      // navigate(from, { replace: true });
+      console.log(data.data, "-----");
+      if (from && from !== "/login" && from !== "/registration") {
+        navigate(from, { replace: true });
+      } else {
+        setTimeout(() => {
+          if (data.data.user_type === "Job Seeker") {
+            navigate("/dashboard/jobseeker", { replace: true });
+            console.log("hellxxx");
+          } else {
+            console.log("hell---");
+            navigate("/dashboard/employer", { replace: true });
+          }
+        }, 0);
+      }
       toast.success("Login successful. Redirecting...", {
         id: "login",
       });
     },
     onError: (error) => {
-      console.log(error, "error--");
-      toast.error("Failed to logged in. Something went wrong...", {
+      console.log(error);
+      const errorMessage =
+        error.response?.data?.data?.non_field_errors?.join("\n") ||
+        "Failed to login. Something went wrong...";
+
+      toast.error(errorMessage, {
         id: "login",
       });
     },
@@ -153,11 +170,7 @@ export default function Login() {
         </form>
         <p className="mt-3 text-sm">
           Don't have an account?{" "}
-          <Link
-            state={location.state}
-            className="text-[#2A9156]"
-            to={"/registration"}
-          >
+          <Link className="text-[#2A9156]" to={"/registration"}>
             Sign Up
           </Link>
         </p>
