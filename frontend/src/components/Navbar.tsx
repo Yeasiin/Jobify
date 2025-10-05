@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
     <div className="border-b">
-      <div className="container mx-auto py-3">
+      <div className="container mx-auto py-3 px-4">
         <div className="flex justify-between">
           <Link to="/" className="flex items-center">
             <div className="flex gap-2 items-center">

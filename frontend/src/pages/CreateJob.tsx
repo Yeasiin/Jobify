@@ -12,15 +12,15 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import z from "zod";
 
-const JobPostSchema = z.object({
+export const JobPostSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters long"),
   company_name: z
     .string()
@@ -38,6 +38,7 @@ const JobPostSchema = z.object({
 export type JobCreateInput = z.infer<typeof JobPostSchema>;
 
 export default function CreateJob() {
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const categories = useQuery({
     queryFn: jobApi.getCategory,
@@ -48,7 +49,8 @@ export default function CreateJob() {
     mutationFn: jobApi.createPost,
     onMutate: () => toast.loading("Loading...", { id: "createJob" }),
     onSuccess: () => {
-      navigate("/postedJobs");
+      navigate("/dashboard/employer");
+      queryClient.invalidateQueries({ queryKey: ["getJobs"] });
       toast.success("Job created successfully.", {
         id: "createJob",
       });

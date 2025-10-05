@@ -5,14 +5,17 @@ from .models import Job, Category
 from .serializers import JobSerializer, CategorySerializer
 from .permissions import IsEmployeeOrReadOnly
 
-
-# Create your views here.
 class JobViewSet(viewsets.ModelViewSet):
     queryset = Job.objects.all()
     serializer_class  = JobSerializer
     permission_classes = [IsEmployeeOrReadOnly]
-        
     
+    
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request']=self.request
+        return context  
+        
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         instance_id = instance.id  # store id before deleting
@@ -22,13 +25,6 @@ class JobViewSet(viewsets.ModelViewSet):
             status=status.HTTP_200_OK
         )
         
-    # def get_permissions(self):
-    #     if self.action in ['list','retrieve']:
-    #         permission_classes = [AllowAny]
-    #     else:
-    #         permission_classes = [IsAuthenticated]
-        
-    #     return [permission() for permission in permission_classes]
     
     
 class CategoryListAPIView(generics.ListAPIView):

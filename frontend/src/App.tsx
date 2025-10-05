@@ -10,6 +10,7 @@ import CreateJob from "./pages/CreateJob";
 import PostedJobs from "./pages/PostedJobs";
 import EmployerDashboard from "./pages/EmployerDashboard";
 import JobSeekerDashboard from "./pages/JobSeekerDashboard";
+import PreviewJob from "./pages/PreviewJob";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/dashboard/employer" element={<EmployerDashboard />} />
         <Route path="/dashboard/jobseeker" element={<JobSeekerDashboard />} />
       </Route>
+      <Route path="/job/:jobId" element={<PreviewJob />} />
 
       <Route path="*" element={<NotFound404 />} />
     </Routes>

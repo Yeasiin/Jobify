@@ -5,6 +5,8 @@ from .models import Job, Category
 class JobSerializer(serializers.ModelSerializer):
     created_by_name = serializers.SerializerMethodField()
     category = serializers.SlugRelatedField(queryset = Category.objects.all(), slug_field='name',allow_null=True)
+    
+    applications_count =  serializers.SerializerMethodField()
     class Meta:
         model = Job
         fields = [
@@ -17,11 +19,15 @@ class JobSerializer(serializers.ModelSerializer):
             "category",
             "created_at",
             "created_by_name",
+            "applications_count"
             ]
         read_only_fields = ["created_at", "created_by_name"]
         
     def get_created_by_name(self, obj):
         return obj.created_by.first_name if obj.created_by else "Deleted User"
+    
+    def get_applications_count(self, obj):
+        return obj.applications.count()
     
 
     def create(self, validated_data):

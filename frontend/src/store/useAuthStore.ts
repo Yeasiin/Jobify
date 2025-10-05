@@ -12,7 +12,7 @@ type UserType = {
     email: string;
     first_name: string;
     last_name: string;
-    user_type: string;
+    user_type: "Job Seeker" | "Employer";
 }
 
 type AuthStoreState = {
