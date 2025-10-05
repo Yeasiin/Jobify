@@ -6,9 +6,27 @@ from .serializers import JobSerializer, CategorySerializer
 from .permissions import IsEmployeeOrReadOnly
 
 class JobViewSet(viewsets.ModelViewSet):
-    queryset = Job.objects.all()
+    # queryset = Job.objects.all()
     serializer_class  = JobSerializer
     permission_classes = [IsEmployeeOrReadOnly]
+    
+    def get_queryset(self):
+        queryset=Job.objects.all()
+        user = self.request.user
+        mine = self.request.query_params.get("mine")  
+        category_name = self.request.query_params.get('category')
+        
+        
+        if mine=='true':
+            if not  user.is_authenticated:
+                return Job.objects.none()
+            
+            queryset = queryset.filter(created_by=user)
+            
+        if category_name:
+            queryset = queryset.filter(category__name__iexact=category_name)
+            
+        return queryset.order_by('-created_at')
     
     
     def get_serializer_context(self):

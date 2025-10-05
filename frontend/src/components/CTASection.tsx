@@ -43,7 +43,9 @@ export default function CTASection() {
                   </Link>
                 </Button>
               )}
-              <Button variant={"secondary"}>Explore Jobs</Button>
+              <Button variant={"secondary"}>
+                <Link to={"/jobs"}>Explore Jobs</Link>
+              </Button>
             </div>
           </div>
         </div>

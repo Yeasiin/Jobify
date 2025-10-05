@@ -29,17 +29,17 @@ export default function EmployerDashboard() {
   const [selectedJob, setSelectJob] = useState<JobType>();
 
   const getJobQuery = useQuery({
-    queryFn: jobApi.getJobs,
-    queryKey: ["getJobs"],
+    queryFn: jobApi.getOwnJobs,
+    queryKey: ["getOwnJobs"],
   });
 
   const deleteJobMutation = useMutation({
     mutationFn: jobApi.deletePost,
-    onMutate: () => toast.loading("Deleting...", { id: "deleteJob" }),
+    onMutate: () => toast.loading("Deleting...", { id: "getOwnJobs" }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["deleteJob"] });
+      queryClient.invalidateQueries({ queryKey: ["getOwnJobs"] });
       toast.success("Job deleted successfully.", {
-        id: "deleteJob",
+        id: "getOwnJobs",
       });
     },
     onError: (error) => {
@@ -49,7 +49,7 @@ export default function EmployerDashboard() {
         error.response?.data?.data ||
           "Failed to delete job. Something went wrong...",
         {
-          id: "deleteJob",
+          id: "getOwnJobs",
         }
       );
     },
@@ -59,7 +59,6 @@ export default function EmployerDashboard() {
   const navigate = useNavigate();
 
   const handleDelete = (postId: number) => {
-    //
     deleteJobMutation.mutate(postId);
   };
 
@@ -130,7 +129,7 @@ export default function EmployerDashboard() {
                         <Loader2 className="animate-spin h-5 w-5 text-gray-500" />
                       ) : (
                         <DeleteJobPostConfirmation
-                          handleDelete={() => handleDelete.bind(each.id)}
+                          handleDelete={handleDelete.bind(null, each.id)}
                         />
                       )}
                     </div>

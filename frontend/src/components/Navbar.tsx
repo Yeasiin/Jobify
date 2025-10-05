@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { useAuthStore } from "@/store/useAuthStore";
 
 export default function Navbar() {
-  const { isAuthenticated, logout } = useAuthStore();
+  const { isAuthenticated, user, logout } = useAuthStore();
 
   return (
     <div className="border-b">
@@ -33,15 +33,32 @@ export default function Navbar() {
             {isAuthenticated ? (
               <div className="flex items-center">
                 <div className="flex gap-6 ">
+                  {user?.user_type === "Employer" ? (
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "underline" : ""
+                      }
+                      to="/createJob"
+                    >
+                      <span className="">Post a Job</span>
+                    </NavLink>
+                  ) : (
+                    <NavLink
+                      className={({ isActive }) =>
+                        isActive ? "underline" : ""
+                      }
+                      to="/jobs"
+                    >
+                      <span className="">Jobs</span>
+                    </NavLink>
+                  )}
                   <NavLink
                     className={({ isActive }) => (isActive ? "underline" : "")}
-                    to="/createJob"
-                  >
-                    <span className="">Post a Job</span>
-                  </NavLink>
-                  <NavLink
-                    className={({ isActive }) => (isActive ? "underline" : "")}
-                    to="/dashboard/employer"
+                    to={
+                      user?.user_type === "Employer"
+                        ? "/dashboard/employer"
+                        : "/dashboard/jobseeker"
+                    }
                   >
                     <span className="">Dashboard</span>
                   </NavLink>
@@ -55,7 +72,15 @@ export default function Navbar() {
                 </Button>
               </div>
             ) : (
-              <div className="flex gap-2">
+              <div className="flex items-center gap-2">
+                <NavLink
+                  className={({ isActive }) =>
+                    isActive ? "underline mr-5" : "mr-5"
+                  }
+                  to="/jobs"
+                >
+                  <span className="">Jobs</span>
+                </NavLink>
                 <Button asChild variant={"outline"}>
                   <Link to={"/login"}>Login</Link>
                 </Button>

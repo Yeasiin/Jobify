@@ -9,7 +9,7 @@ import { useAuthStore } from "@/store/useAuthStore";
 
 export default function PreviewJob() {
   const { jobId } = useParams();
-  const { user } = useAuthStore();
+  const { user, isAuthenticated } = useAuthStore();
   const jobIdNumber = jobId ? Number(jobId) : undefined;
 
   const jobQuery = useQuery<JobType>({
@@ -132,11 +132,16 @@ export default function PreviewJob() {
             </div>
 
             <div className="flex flex-col items-start">
-              <Button disabled={user?.user_type === "Employer"}>
+              <Button
+                disabled={user?.user_type === "Employer" || !isAuthenticated}
+              >
                 Apply Now
               </Button>
               {user?.user_type === "Employer" && (
                 <small>You can't apply as you are using employee account</small>
+              )}
+              {!isAuthenticated && (
+                <small>You can't apply as you are not logged yet</small>
               )}
             </div>
           </>
