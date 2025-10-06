@@ -15,8 +15,11 @@ class Application(models.Model):
     experience =  models.CharField(max_length=100,blank=True)
     expected_salary =  models.CharField(max_length=100,blank=True)
     link = models.CharField(max_length=100,blank=True)
+    
     job = models.ForeignKey(Job, on_delete=models.CASCADE,related_name='applications')
+    
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name='applications')
+    
     applied_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:

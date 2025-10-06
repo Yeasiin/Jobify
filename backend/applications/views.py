@@ -18,10 +18,13 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         my_jobs = Job.objects.filter(created_by=user)
         
         if my_jobs.exists():
-            return Application.objects.filter(job__in=my_jobs)
+            return Application.objects.filter(job__in=my_jobs).select_related('job', 'user')
         else:
-            return Application.objects.filter(user=user)
+            return Application.objects.filter(user=user).select_related('job', 'user')
         
+    
     def perform_create(self, serializer):
+       
         serializer.save(user=self.request.user)
+       
     

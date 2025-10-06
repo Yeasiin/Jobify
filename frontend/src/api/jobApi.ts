@@ -1,5 +1,6 @@
 import type { JobCreateInput } from "@/pages/CreateJob";
 import { api, publicApi } from "./axios";
+import type { ApplyInputType } from "@/components/ApplyModal";
 
 export const jobApi = {
     getCategory: () => publicApi.get("/jobs/categories").then(data => data.data),
@@ -9,5 +10,9 @@ export const jobApi = {
     getJob: (jobId: number) => api.get(`/jobs/${jobId}`).then(data => data.data),
     createPost: (data: JobCreateInput) => api.post("/jobs/", data),
     updatePost: ({ jobId, data }: { jobId: number; data: JobCreateInput }) => api.patch(`/jobs/${jobId}/`, data),
-    deletePost: (jobId: number) => api.delete(`/jobs/${jobId}/`)
+    deletePost: (jobId: number) => api.delete(`/jobs/${jobId}/`),
+    // 
+    applyToJob: (data: ApplyInputType) => api.post("/applications/", data, {
+        headers: { "Content-Type": "multipart/form-data" },
+    })
 }

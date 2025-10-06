@@ -1,13 +1,16 @@
-import { jobApi } from "@/api/jobApi";
-import Navbar from "@/components/Navbar";
-import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useParams } from "react-router";
-import type { JobType } from "./EmployerDashboard";
+import { useQuery } from "@tanstack/react-query";
+import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/useAuthStore";
+import ApplyModal from "@/components/ApplyModal";
+import type { JobType } from "./EmployerDashboard";
+import { jobApi } from "@/api/jobApi";
 
 export default function PreviewJob() {
+  const [isOpenApplyModal, setIsOpenApplyModal] = useState(false);
   const { jobId } = useParams();
   const { user, isAuthenticated } = useAuthStore();
   const jobIdNumber = jobId ? Number(jobId) : undefined;
@@ -133,7 +136,9 @@ export default function PreviewJob() {
 
             <div className="flex flex-col items-start">
               <Button
+                onClick={setIsOpenApplyModal.bind(null, true)}
                 disabled={user?.user_type === "Employer" || !isAuthenticated}
+                className="cursor-pointer"
               >
                 Apply Now
               </Button>
@@ -151,6 +156,11 @@ export default function PreviewJob() {
           </div>
         )}
       </div>
+
+      <ApplyModal
+        isVisible={isOpenApplyModal}
+        handleClose={setIsOpenApplyModal.bind(null, false)}
+      />
     </div>
   );
 }
