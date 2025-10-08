@@ -16,5 +16,6 @@ export const jobApi = {
         headers: { "Content-Type": "multipart/form-data" },
     }),
     getJobApplicant: (job_id: number) => api.get('/applications/by-job/', { params: { job_id } }),
-    appliedJobs: () => api.get("/applications/applied_job/")
+    appliedJobs: () => api.get("/applications/applied_job/"),
+    updateApplicantStatus: (data: { status: string; job_id: number; application_id: number }) => api.patch(`/applications/${data.application_id}/update-status/`, { status: data.status, job_id: data.job_id })
 }

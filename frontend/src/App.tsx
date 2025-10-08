@@ -26,7 +26,6 @@ function App() {
         <Route path="/createJob" element={<CreateJob />} />
         <Route path="/dashboard/employer" element={<EmployerDashboard />} />
         <Route path="/applications/:jobId" element={<JobApplications />} />
-
         <Route path="/dashboard/jobseeker" element={<JobSeekerDashboard />} />
       </Route>
       <Route path="/jobs" element={<Jobs />} />

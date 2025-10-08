@@ -73,76 +73,82 @@ export default function EmployerDashboard() {
     <div>
       <Navbar />
       <div className="max-w-2xl mx-auto px-4">
-        <h4 className="font-medium text-2xl pt-4 pb-3">Job - Posted By You</h4>
         {getJobQuery.isLoading ? (
           <div className="flex justify-center pb-5">
             <Loader2 className="animate-spin h-7 w-7 text-gray-500" />
           </div>
         ) : getJobQuery.data?.data?.length !== 0 ? (
-          <table className="table-auto w-full">
-            <thead className="bg-gray-200 ">
-              <tr className="text-left">
-                <th className="px-2 py-1 font-semibold">Title</th>
-                <th className="px-2 py-1 text-center font-semibold">
-                  Date Posted
-                </th>
-                <th className="px-2 py-1 text-center font-semibold">
-                  Applications
-                </th>
-                <th className="px-2 py-1 text-center font-semibold">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {getJobQuery.data?.data?.map((each: JobType, index: number) => (
-                <tr
-                  key={each.id}
-                  className={`${
-                    index % 2 == 1 && "bg-gray-50"
-                  } hover:bg-gray-100`}
-                >
-                  <td className="px-2 py-1">{each.title}</td>
-                  <td className="px-2 py-1 text-center">
-                    {new Date(each.created_at).toLocaleDateString("en-GB")}
-                  </td>
-                  <td className="px-2 py-1 text-center ">
-                    <Link
-                      to={`/applications/${each.id}`}
-                      className="underline cursor-pointer hover:text-blue-500"
-                    >
-                      {each.applications_count}
-                    </Link>
-                  </td>
-                  <td className="px-2 py-1 ">
-                    <div className="flex gap-3 justify-center">
-                      <Link
-                        to={`/job/${each.id}`}
-                        className="hover:underline hover:text-blue-400"
-                      >
-                        View
-                      </Link>
-                      <button
-                        onClick={() => {
-                          setIsEditingJob(true);
-                          setSelectJob(each);
-                        }}
-                        className="hover:underline hover:text-blue-400"
-                      >
-                        Edit
-                      </button>
-
-                      {deleteJobMutation.isPending ? (
-                        <Loader2 className="animate-spin h-5 w-5 text-gray-500" />
-                      ) : (
-                        <DeleteJobPostConfirmation
-                          handleDelete={handleDelete.bind(null, each.id)}
-                        />
-                      )}
-                    </div>
-                  </td>
+          <>
+            <h4 className="font-medium text-2xl pt-4 pb-3">
+              Job - Posted By You
+            </h4>
+            <table className="table-auto w-full">
+              <thead className="bg-gray-200 ">
+                <tr className="text-left">
+                  <th className="px-2 py-1 font-semibold">Title</th>
+                  <th className="px-2 py-1 text-center font-semibold">
+                    Date Posted
+                  </th>
+                  <th className="px-2 py-1 text-center font-semibold">
+                    Applications
+                  </th>
+                  <th className="px-2 py-1 text-center font-semibold">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {getJobQuery.data?.data?.map((each: JobType, index: number) => (
+                  <tr
+                    key={each.id}
+                    className={`${
+                      index % 2 == 1 && "bg-gray-50"
+                    } hover:bg-gray-100`}
+                  >
+                    <td className="px-2 py-1">{each.title}</td>
+                    <td className="px-2 py-1 text-center">
+                      {new Date(each.created_at).toLocaleDateString("en-GB")}
+                    </td>
+                    <td className="px-2 py-1 text-center ">
+                      <Link
+                        to={`/applications/${each.id}`}
+                        className="underline cursor-pointer hover:text-blue-500"
+                      >
+                        {each.applications_count}
+                      </Link>
+                    </td>
+                    <td className="px-2 py-1 ">
+                      <div className="flex gap-3 justify-center">
+                        <Link
+                          to={`/job/${each.id}`}
+                          className="hover:underline hover:text-blue-400"
+                        >
+                          View
+                        </Link>
+                        <button
+                          onClick={() => {
+                            setIsEditingJob(true);
+                            setSelectJob(each);
+                          }}
+                          className="hover:underline hover:text-blue-400"
+                        >
+                          Edit
+                        </button>
+
+                        {deleteJobMutation.isPending ? (
+                          <Loader2 className="animate-spin h-5 w-5 text-gray-500" />
+                        ) : (
+                          <DeleteJobPostConfirmation
+                            handleDelete={handleDelete.bind(null, each.id)}
+                          />
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
         ) : (
           <div className="flex justify-center flex-col items-center mt-4">
             <h4 className="font-medium text-lg mb-2">

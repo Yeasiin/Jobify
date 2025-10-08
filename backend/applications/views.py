@@ -56,7 +56,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         serializer = ApplicationSerializer(applications, many=True)
         return Response(serializer.data)
     
-    @action(detail=True, methods=['patch'], url_path='update-status')
+    @action(detail=True, methods=['patch'], url_path='update-status',   parser_classes=[parsers.JSONParser])
     def update_status(self, request, pk=None):
         application = self.get_object()
         

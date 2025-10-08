@@ -2,5 +2,5 @@
 _venv
 *.sqlite3
 *.env
-media/
-uploads/
+backend/media/
+backend/uploads/

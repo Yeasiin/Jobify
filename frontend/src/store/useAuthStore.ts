@@ -6,7 +6,7 @@ type DecodedToken = {
     [key: string]: any
 }
 
-type UserType = {
+export type UserType = {
     pk: number;
     email: string;
     first_name: string;
