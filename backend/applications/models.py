@@ -10,8 +10,16 @@ from django.dispatch import  receiver
 
 User = get_user_model()
 class Application(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('reviewing', 'Reviewing'),
+        ('shortlisted', 'Shortlisted'),
+        ('rejected', 'Rejected'),
+        ('accepted', 'Accepted'),
+    ]
+    
     resume = models.FileField(upload_to='uploads/',blank=True)
-    cover_later =  models.TextField(blank=True)
+    cover_letter =  models.TextField(blank=True)
     experience =  models.CharField(max_length=100,blank=True)
     expected_salary =  models.CharField(max_length=100,blank=True)
     link = models.CharField(max_length=100,blank=True)
@@ -19,8 +27,13 @@ class Application(models.Model):
     job = models.ForeignKey(Job, on_delete=models.CASCADE,related_name='applications')
     
     user = models.ForeignKey(User,on_delete=models.SET_NULL,null=True,related_name='applications')
-    
     applied_at = models.DateTimeField(auto_now_add=True)
+    
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='pending'
+    )
     
     class Meta:
         unique_together = ('job', 'user')

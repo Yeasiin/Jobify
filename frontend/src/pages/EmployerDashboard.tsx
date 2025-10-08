@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/useAuthStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { toast } from "sonner";
 
@@ -21,6 +21,7 @@ export type JobType = {
   created_at: string;
   created_by_name: string;
   applications_count: number;
+  applied: boolean;
 };
 
 export default function EmployerDashboard() {
@@ -62,7 +63,7 @@ export default function EmployerDashboard() {
     deleteJobMutation.mutate(postId);
   };
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if (user?.user_type === "Job Seeker") {
       navigate("/dashboard/jobseeker");
     }
@@ -72,12 +73,13 @@ export default function EmployerDashboard() {
     <div>
       <Navbar />
       <div className="max-w-2xl mx-auto px-4">
+        <h4 className="font-medium text-2xl pt-4 pb-3">Job - Posted By You</h4>
         {getJobQuery.isLoading ? (
-          <div className="flex justify-center py-5">
+          <div className="flex justify-center pb-5">
             <Loader2 className="animate-spin h-7 w-7 text-gray-500" />
           </div>
         ) : getJobQuery.data?.data?.length !== 0 ? (
-          <table className="table-auto w-full mt-4">
+          <table className="table-auto w-full">
             <thead className="bg-gray-200 ">
               <tr className="text-left">
                 <th className="px-2 py-1 font-semibold">Title</th>
@@ -103,9 +105,12 @@ export default function EmployerDashboard() {
                     {new Date(each.created_at).toLocaleDateString("en-GB")}
                   </td>
                   <td className="px-2 py-1 text-center ">
-                    <button className="underline cursor-pointer hover:text-blue-500">
+                    <Link
+                      to={`/applications/${each.id}`}
+                      className="underline cursor-pointer hover:text-blue-500"
+                    >
                       {each.applications_count}
-                    </button>
+                    </Link>
                   </td>
                   <td className="px-2 py-1 ">
                     <div className="flex gap-3 justify-center">

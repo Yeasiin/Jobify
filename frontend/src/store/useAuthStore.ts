@@ -1,5 +1,4 @@
 import { create } from "zustand"
-import { produce } from "immer"
 import { jwtDecode } from "jwt-decode"
 
 type DecodedToken = {

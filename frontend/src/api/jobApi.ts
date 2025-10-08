@@ -14,5 +14,7 @@ export const jobApi = {
     // 
     applyToJob: (data: ApplyInputType) => api.post("/applications/", data, {
         headers: { "Content-Type": "multipart/form-data" },
-    })
+    }),
+    getJobApplicant: (job_id: number) => api.get('/applications/by-job/', { params: { job_id } }),
+    appliedJobs: () => api.get("/applications/applied_job/")
 }

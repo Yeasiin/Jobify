@@ -135,18 +135,30 @@ export default function PreviewJob() {
             </div>
 
             <div className="flex flex-col items-start">
-              <Button
-                onClick={setIsOpenApplyModal.bind(null, true)}
-                disabled={user?.user_type === "Employer" || !isAuthenticated}
-                className="cursor-pointer"
-              >
-                Apply Now
-              </Button>
-              {user?.user_type === "Employer" && (
-                <small>You can't apply as you are using employee account</small>
-              )}
-              {!isAuthenticated && (
-                <small>You can't apply as you are not logged yet</small>
+              {jobQuery.data.applied ? (
+                <Button disabled className="cursor-pointer">
+                  Already Applied
+                </Button>
+              ) : (
+                <>
+                  <Button
+                    onClick={setIsOpenApplyModal.bind(null, true)}
+                    disabled={
+                      user?.user_type === "Employer" || !isAuthenticated
+                    }
+                    className="cursor-pointer"
+                  >
+                    Apply Now
+                  </Button>
+                  {user?.user_type === "Employer" && (
+                    <small>
+                      You can't apply as you are using employee account
+                    </small>
+                  )}
+                  {!isAuthenticated && (
+                    <small>You can't apply as you are not logged yet</small>
+                  )}
+                </>
               )}
             </div>
           </>

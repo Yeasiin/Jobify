@@ -6,7 +6,6 @@ from jobs.models import Job
 
 User = get_user_model()
 
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -14,16 +13,18 @@ class UserSerializer(serializers.ModelSerializer):
 class ApplicationSerializer(serializers.ModelSerializer):
     job = JobSerializer(read_only=True)
     user = UserSerializer(read_only=True) 
-    job_id = serializers.PrimaryKeyRelatedField( queryset=Job.objects.all(), write_only=True, source='job')
+    job_id = serializers.PrimaryKeyRelatedField(
+        queryset=Job.objects.all(),
+        write_only=True,
+        source='job')
     
     class Meta:
         model = Application
         # fields = '__all__'
-        exclude = []
-        # exclude = ['user']
+        fields = ['id', 'user', 'job', 'job_id', 'resume', 'cover_letter', 'experience', 'expected_salary', 'link', 'applied_at', 'status']
+        
         
     def validate(self, attrs):
-        
         user = self.context['request'].user
         job = attrs['job']
         

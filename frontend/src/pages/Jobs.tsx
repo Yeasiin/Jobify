@@ -121,7 +121,7 @@ export default function Jobs() {
 function JobCard({ data }: { data: JobType }) {
   return (
     <Link to={`/job/${data.id}`}>
-      <div className="p-4 border border-gray-200 rounded-md shadow-sm mb-2.5">
+      <div className="p-4 border border-gray-200 rounded-md shadow-sm mb-2.5 relative">
         <div className="mb-2 flex justify-between items-center">
           <h2 className="text-lg font-semibold ">{data.title}</h2>
         </div>
@@ -142,6 +142,12 @@ function JobCard({ data }: { data: JobType }) {
         <p className="text-gray-700 line-clamp-2">
           <span className="font-medium">Description</span>: {data.description}
         </p>
+
+        {data.applied && (
+          <p className="absolute top-0 right-0 bg-blue-400 text-white px-3 py-1 rounded text-xs">
+            Applied
+          </p>
+        )}
       </div>
     </Link>
   );

@@ -12,7 +12,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { jobApi } from "@/api/jobApi";
 import { Loader2 } from "lucide-react";
 import { useParams } from "react-router";
@@ -34,7 +34,7 @@ const applySchema = z.object({
     .refine((file) => file?.type === "application/pdf", {
       message: "Only PDF files are allowed",
     }),
-  cover_later: z
+  cover_letter: z
     .string()
     .min(10, "Cover letter must be at least 10 characters long")
     .max(2000, "Cover letter too long"),
@@ -55,7 +55,7 @@ const applySchema = z.object({
       (val) => !val || /^https?:\/\/[^\s]+$/.test(val),
       "Please enter a valid URL"
     ),
-  job: z.number().optional(),
+  job_id: z.number(),
 });
 export type ApplyInputType = z.infer<typeof applySchema>;
 
@@ -63,7 +63,7 @@ export default function ApplyModal({
   isVisible,
   handleClose,
 }: ApplyModalProps) {
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   const { jobId } = useParams();
   const jobIdNumber = jobId ? Number(jobId) : undefined;
 
@@ -71,21 +71,31 @@ export default function ApplyModal({
     mutationFn: jobApi.applyToJob,
     onMutate: () => toast.loading("Loading...", { id: "applyJob" }),
     onSuccess: (res) => {
-      console.log(res, "-res-");
+      queryClient.invalidateQueries({ queryKey: ["getJob"] });
       toast.success("Job Applied Successfully.", {
         id: "applyJob",
       });
       handleClose();
     },
     onError: (error) => {
-      console.log(error, "---error");
-      toast.error(
-        error.response?.data?.data ||
-          "Failed to apply job. Something went wrong...",
-        {
+      const errorData = error.response?.data?.data;
+      console.log(error.response);
+
+      if (errorData) {
+        const messages = Object.values(errorData)
+          .flat() // in case some fields have multiple messages
+          .filter((msg) => typeof msg === "string"); // only keep text messages
+
+        messages.forEach((msg) =>
+          toast.error(msg, {
+            id: "applyJob",
+          })
+        ); // show each with toast
+      } else {
+        toast.error("Something went wrong. Please try again.", {
           id: "applyJob",
-        }
-      );
+        });
+      }
     },
   });
 
@@ -96,11 +106,11 @@ export default function ApplyModal({
   } = useForm<ApplyInputType>({
     resolver: zodResolver(applySchema),
     defaultValues: {
-      cover_later: "",
+      cover_letter: "",
       experience: "",
       expected_salary: "",
       link: "",
-      job: jobIdNumber,
+      job_id: jobIdNumber,
     },
   });
 
@@ -121,57 +131,68 @@ export default function ApplyModal({
             </DialogHeader>
 
             <div className="grid gap-4">
-              <form method="POST" onSubmit={handleSubmit(onSubmit)}>
-                {/*  */}
-                <div className="mb-4">
-                  <Label className="mb-1.5">Resume</Label>
-                  <Input
-                    type="file"
-                    accept="application/pdf"
-                    {...register("resume", {
-                      required: "PDF file is required",
-                    })}
-                    placeholder="Year of experience"
-                  />
-                  <p className="text-red-400 text-sm">
-                    {errors.resume?.message}
-                  </p>
-                </div>
-                {/*  */}
-                <div className="mb-4">
-                  <Label className="mb-1.5">Year of experience</Label>
-                  <Input
-                    {...register("experience")}
-                    type="number"
-                    placeholder="Year of experience"
-                  />
-                  <p className="text-red-400 text-sm">
-                    {errors.experience?.message}
-                  </p>
-                </div>
-                {/*  */}
-                <div className="mb-4">
-                  <Label className="mb-1.5">Expected salary</Label>
-                  <Input
-                    {...register("expected_salary")}
-                    placeholder="Expected salary"
-                  />
-                  <p className="text-red-400 text-sm">
-                    {errors.expected_salary?.message}
-                  </p>
-                </div>
-                {/*  */}
-                <div className="mb-4">
-                  <Label className="mb-1.5">Cover later</Label>
-                  <Textarea
-                    {...register("cover_later")}
-                    placeholder="Cover later"
-                  />
-                  <p className="text-red-400 text-sm">
-                    {errors.cover_later?.message}
-                  </p>
-                </div>
-              </form>
+              {/*  */}
+              <div className="mb-1">
+                <Label className="mb-1.5">Resume</Label>
+                <Input
+                  type="file"
+                  accept="application/pdf"
+                  {...register("resume", {
+                    required: "PDF file is required",
+                  })}
+                  placeholder="Year of experience"
+                />
+                <p className="text-red-400 text-sm">{errors.resume?.message}</p>
+              </div>
+              {/*  */}
+              <div className="mb-1">
+                <Label className="mb-1.5">Year of experience</Label>
+                <Input
+                  {...register("experience")}
+                  type="number"
+                  placeholder="Year of experience"
+                />
+                <p className="text-red-400 text-sm">
+                  {errors.experience?.message}
+                </p>
+              </div>
+              {/*  */}
+              <div className="mb-1">
+                <Label className="mb-1.5">Expected salary</Label>
+                <Input
+                  {...register("expected_salary")}
+                  placeholder="Expected salary"
+                />
+                <p className="text-red-400 text-sm">
+                  {errors.expected_salary?.message}
+                </p>
+              </div>
+              {/*  */}
+              <div className="mb-1">
+                <Label className="mb-1.5">Cover Letter</Label>
+                <Textarea
+                  {...register("cover_letter")}
+                  placeholder="Cover Letter"
+                />
+                <p className="text-red-400 text-sm">
+                  {errors.cover_letter?.message}
+                </p>
+              </div>
+              {/*  */}
+              <div className="mb-1">
+                <Label className="mb-1.5">Link</Label>
+                <Input
+                  {...register("link")}
+                  placeholder="eg. https://github.com/<username>"
+                />
+                <p className="text-red-400 text-sm">{errors.link?.message}</p>
+              </div>
+              {/*  */}
+              <input
+                type="hidden"
+                {...register("job_id")}
+                value={jobIdNumber}
+              />
             </div>
             <DialogFooter>
               <DialogClose asChild>
