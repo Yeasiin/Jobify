@@ -1,21 +1,15 @@
-from django.shortcuts import render
-from rest_framework import viewsets, parsers,status
+from rest_framework import viewsets, parsers
 from .models import Application
 from .serializers import ApplicationSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .serializers import JobSerializer
 from rest_framework import status as drf_status
-from django.core.mail import send_mail
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
-from django.conf import settings
 
-from django.template import TemplateDoesNotExist
-from django.template import engines
 
 
 
@@ -53,7 +47,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 'user': user,
                 'job': job,
                 'company_name': 'Job Portal',
-                'dashboard_url': f'http://localhost:5173/dashboard/jobseeker'
+                'dashboard_url': f'{settings.FRONTEND_URL}/dashboard/jobseeker'
             })
             msg1 = EmailMultiAlternatives(
                 subject=applicant_subject,
@@ -75,7 +69,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
                 'job': job,
                 'job_creator': job_creator,
                 'company_name': 'Job Portal',
-                'dashboard_url': f'http://localhost:5173/dashboard/employer'
+                'dashboard_url': f'{settings.FRONTEND_URL}/dashboard/employer'
             })
             msg2 = EmailMultiAlternatives(
                 subject=creator_subject,
