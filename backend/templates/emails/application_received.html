@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Application Received</title>
+  </head>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      padding: 30px;
+    "
+  >
+    <div
+      style="
+        max-width: 600px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h2 style="color: #111827">Hello {{ user.first_name }},</h2>
+      <p style="color: #374151">
+        We’ve received your application for the position
+        <strong>{{ job.title }}</strong>.
+      </p>
+      <p style="color: #374151">
+        Our team will review your application and get back to you soon. Thank
+        you for your interest and for taking the time to apply!
+      </p>
+
+      <div style="margin-top: 24px">
+        <a
+          href="{{ dashboard_url }}"
+          style="
+            background-color: #2563eb;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+          "
+          >View Job</a
+        >
+      </div>
+
+      <p style="margin-top: 24px; font-size: 13px; color: #9ca3af">
+        — The {{ company_name }} Team
+      </p>
+    </div>
+  </body>
+</html>

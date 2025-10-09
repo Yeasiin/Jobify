@@ -8,6 +8,16 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .serializers import JobSerializer
 from rest_framework import status as drf_status
+from django.core.mail import send_mail
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+
+from django.template import TemplateDoesNotExist
+from django.template import engines
+
+
 
 
 from jobs.models import Job
@@ -30,8 +40,56 @@ class ApplicationViewSet(viewsets.ModelViewSet):
         else:
             return Application.objects.filter(user=user).select_related('user')
     
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    def perform_create(self, serializer):   
+        application = serializer.save(user=self.request.user)
+        user = self.request.user
+        job = application.job
+        job_creator = job.created_by
+ 
+        try:
+            # Applicant email
+            applicant_subject = f"Application Received for {job.title}"
+            applicant_html = render_to_string('emails/application_received.html', {
+                'user': user,
+                'job': job,
+                'company_name': 'Job Portal',
+                'dashboard_url': f'http://localhost:5173/dashboard/jobseeker'
+            })
+            msg1 = EmailMultiAlternatives(
+                subject=applicant_subject,
+                body="Your application has been received successfully.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[user.email],
+            )
+            msg1.attach_alternative(applicant_html, "text/html")
+            msg1.send()
+            
+        except Exception as e:
+            print("Applicant email failed:", e)
+
+        try:
+            # Job creator email
+            creator_subject = f"New Application for {job.title}"
+            creator_html = render_to_string('emails/new_application.html', {
+                'user': user,
+                'job': job,
+                'job_creator': job_creator,
+                'company_name': 'Job Portal',
+                'dashboard_url': f'http://localhost:5173/dashboard/employer'
+            })
+            msg2 = EmailMultiAlternatives(
+                subject=creator_subject,
+                body=f"You have received a new application from {user.first_name}.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[job_creator.email],
+            )
+            msg2.attach_alternative(creator_html, "text/html")
+            msg2.send()
+            
+        except Exception as e:
+            print("Job creator email failed:", e)
+
+    
         
     @action(detail=False, methods=['get'], url_path='by-job')
     def get_applications_by_job(self, request):

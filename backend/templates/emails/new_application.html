@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>New Application Notification</title>
+  </head>
+  <body
+    style="
+      font-family: Arial, sans-serif;
+      background-color: #f9fafb;
+      padding: 30px;
+    "
+  >
+    <div
+      style="
+        max-width: 600px;
+        margin: auto;
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 25px;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <h2 style="color: #111827">Hello {{ job_creator.first_name }},</h2>
+      <p style="color: #374151">
+        You’ve received a new application for <strong>{{ job.title }}</strong>.
+      </p>
+
+      <div
+        style="
+          background-color: #f3f4f6;
+          padding: 15px;
+          border-radius: 6px;
+          margin: 20px 0;
+        "
+      >
+        <p style="margin: 0; color: #111827">
+          <strong>Applicant:</strong>
+          {{ user.first_name }} {{ user.last_name}}
+          <br />
+          <strong>Email:</strong>
+          {{ user.email }}
+        </p>
+      </div>
+
+      <p style="color: #374151">
+        You can review the full application from your dashboard.
+      </p>
+
+      <div style="margin-top: 24px">
+        <a
+          href="{{ dashboard_url }}"
+          style="
+            background-color: #16a34a;
+            color: #ffffff;
+            padding: 10px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+          "
+          >View Application</a
+        >
+      </div>
+
+      <p style="margin-top: 24px; font-size: 13px; color: #9ca3af">
+        — The {{ company_name }} Team
+      </p>
+    </div>
+  </body>
+</html>
