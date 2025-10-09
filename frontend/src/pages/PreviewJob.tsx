@@ -25,7 +25,7 @@ export default function PreviewJob() {
   return (
     <div>
       <Navbar />
-      <div className="max-w-2xl mx-auto px-4 pt-4">
+      <div className="max-w-2xl mx-auto px-4 pt-4 mb-12">
         {jobQuery.isLoading ? (
           <div className="flex justify-center py-5">
             <Loader2 className="animate-spin h-7 w-7 text-gray-500" />

@@ -57,6 +57,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             )
             msg1.attach_alternative(applicant_html, "text/html")
             msg1.send()
+            print("sent msg1")
             
         except Exception as e:
             print("Applicant email failed:", e)
@@ -79,6 +80,7 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             )
             msg2.attach_alternative(creator_html, "text/html")
             msg2.send()
+            print("sent msg2")
             
         except Exception as e:
             print("Job creator email failed:", e)
