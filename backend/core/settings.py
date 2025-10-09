@@ -29,9 +29,9 @@ FRONTEND_URL = env.get("FRONTEND_URL")
 SECRET_KEY = 'django-insecure-$&4ly3=965haxt)&@-7vr0e@conkmpripm15s=50#r@y6%ba1a'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False if env.get("RENDER") == "true" else True
 
-ALLOWED_HOSTS = [env.get('ALLOWED_HOSTS')]
+ALLOWED_HOSTS = env.get("ALLOWED_HOSTS", "").split(",")
 
 
 # Application definition
