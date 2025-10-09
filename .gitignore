@@ -4,3 +4,4 @@ _venv
 *.env
 backend/media/
 backend/uploads/
+backend/static/
