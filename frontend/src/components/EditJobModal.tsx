@@ -48,7 +48,7 @@ export function EditJobModal({
     mutationFn: jobApi.updatePost,
     onMutate: () => toast.loading("Loading...", { id: "updateJob" }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getJobs"] });
+      queryClient.invalidateQueries({ queryKey: ["getOwnJobs"] });
       toast.success("Job Information updated successfully.", {
         id: "updateJob",
       });
