@@ -57,34 +57,32 @@ class ApplicationViewSet(viewsets.ModelViewSet):
             )
             msg1.attach_alternative(applicant_html, "text/html")
             msg1.send()
-            print("sent msg1")
             
         except Exception as e:
             print("Applicant email failed:", e)
 
-        if job_creator:
-            try:
-                # Job creator email
-                creator_subject = f"New Application for {job.title}"
-                creator_html = render_to_string('emails/new_application.html', {
-                    'user': user,
-                    'job': job,
-                    'job_creator': job_creator,
-                    'company_name': 'Job Portal',
-                    'dashboard_url': f'{settings.FRONTEND_URL}/dashboard/employer'
-                })
-                msg2 = EmailMultiAlternatives(
-                    subject=creator_subject,
-                    body=f"You have received a new application from {user.first_name}.",
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    to=[job_creator.email],
-                )
-                msg2.attach_alternative(creator_html, "text/html")
-                msg2.send()
-                print("sent msg2")
-                
-            except Exception as e:
-                print("Job creator email failed:", e)
+      
+        try:
+            # Job creator email
+            creator_subject = f"New Application for {job.title}"
+            creator_html = render_to_string('emails/new_application.html', {
+                'user': user,
+                'job': job,
+                'job_creator': job_creator,
+                'company_name': 'Job Portal',
+                'dashboard_url': f'{settings.FRONTEND_URL}/dashboard/employer'
+            })
+            msg2 = EmailMultiAlternatives(
+                subject=creator_subject,
+                body=f"You have received a new application from {user.first_name}.",
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                to=[job_creator.email],
+            )
+            msg2.attach_alternative(creator_html, "text/html")
+            msg2.send()
+            
+        except Exception as e:
+            print("Job creator email failed:", e)
 
     
         
